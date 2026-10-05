@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
+    android:orientation="vertical"
+    android:paddingStart="16dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="16dp">
+
+    <TextView
+        style="@style/ScreenTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Journal" />
+
+    <!-- Weekly summary -->
+    <LinearLayout
+        style="@style/HeroBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        android:padding="18dp">
+
+        <TextView
+            style="@style/OverLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This week"
+            android:textColor="@color/text_on_hero_dim" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout style="@style/StatColumn">
+
+                <TextView
+                    android:id="@+id/tv_sum_workouts"
+                    style="@style/HeroValue"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/HeroLabel"
+                    android:text="Workouts" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/StatColumn">
+
+                <TextView
+                    android:id="@+id/tv_sum_minutes"
+                    style="@style/HeroValue"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/HeroLabel"
+                    android:text="Minutes" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/StatColumn">
+
+                <TextView
+                    android:id="@+id/tv_sum_calories"
+                    style="@style/HeroValue"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/HeroLabel"
+                    android:text="Calories" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/StatColumn">
+
+                <TextView
+                    android:id="@+id/tv_sum_heart"
+                    style="@style/HeroValue"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/HeroLabel"
+                    android:text="Heart Pts" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        style="@style/OverLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="4dp"
+        android:text="All activities · long-press to delete" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_journal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="100dp" />
+
+        <TextView
+            android:id="@+id/tv_empty"
+            style="@style/SubText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="60dp"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:text="🏃‍♀️\n\nYour journal is empty.\nTap Add activity to log your first workout."
+            android:textSize="15sp" />
+    </FrameLayout>
+</LinearLayout>

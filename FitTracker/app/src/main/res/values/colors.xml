@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand -->
+    <color name="primary">#5B3FF5</color>
+    <color name="primary_dark">#3B23C9</color>
+    <color name="primary_light">#ECE8FF</color>
+    <color name="hero_start">#4C2FE8</color>
+    <color name="hero_end">#9D5CF6</color>
+
+    <!-- Metrics -->
+    <color name="heart_color">#FF6B5A</color>
+    <color name="heart_light">#FFB36B</color>
+    <color name="steps_color">#22C7A0</color>
+    <color name="steps_light">#7DF9D2</color>
+    <color name="calorie_color">#FF7A45</color>
+    <color name="distance_color">#0EA5E9</color>
+    <color name="move_color">#7C5CFA</color>
+
+    <!-- Soft tile backgrounds -->
+    <color name="tile_calorie">#FFF0EA</color>
+    <color name="tile_distance">#E6F6FE</color>
+    <color name="tile_move">#EFEAFF</color>
+    <color name="tile_steps">#E5FAF4</color>
+    <color name="tile_heart">#FFECEA</color>
+
+    <!-- Neutrals -->
+    <color name="app_bg">#F6F5FB</color>
+    <color name="card_bg">#FFFFFF</color>
+    <color name="divider">#ECEAF3</color>
+    <color name="text_primary">#1B1735</color>
+    <color name="text_secondary">#6B6880</color>
+    <color name="text_on_hero">#FFFFFF</color>
+    <color name="text_on_hero_dim">#D9D2FF</color>
+    <color name="danger_red">#E5484D</color>
+    <color name="white">#FFFFFF</color>
+</resources>

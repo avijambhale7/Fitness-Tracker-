@@ -1,0 +1,58 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.example.fittracker'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.example.fittracker"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+// Copies android.jar + library jars to app/build/vscode-libs so the VS Code
+// Java extension (which cannot import Android projects) can resolve classes.
+tasks.register('vscodeClasspath') {
+    def outDir = layout.buildDirectory.dir('vscode-libs').get().asFile
+    doLast {
+        delete outDir
+        outDir.mkdirs()
+        def libs = configurations.debugCompileClasspath.incoming.artifactView {
+            attributes { attribute(Attribute.of('artifactType', String), 'android-classes-jar') }
+        }.files.files
+        (android.bootClasspath + libs).eachWithIndex { f, i ->
+            copy {
+                from f
+                into outDir
+                rename { "${i}-${f.parentFile.parentFile.name}.jar" }
+            }
+        }
+    }
+}
+tasks.matching { it.name == 'assembleDebug' }.configureEach { finalizedBy 'vscodeClasspath' }
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+}
