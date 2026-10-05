@@ -18,7 +18,6 @@ public class DayStats {
     public int steps;
     public int heartPoints;
     public int moveMinutes;
-    public int workouts;
     public double calories;
     public double distanceKm;
 
@@ -68,7 +67,6 @@ public class DayStats {
         long workoutSeconds = 0;
         double workoutDistanceM = 0;
         for (Workout w : workouts) {
-            s.workouts++;
             s.heartPoints += w.heartPoints;
             s.calories += w.calories;
             workoutSeconds += w.durationSec;
