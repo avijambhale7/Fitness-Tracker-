@@ -1,0 +1,16 @@
+{
+    // The VS Code Java extension cannot import Android Gradle projects
+    // (that caused "Gradle: Build Error" / "non-project file").
+    // Build with gradlew or Android Studio; VS Code only uses these paths for code intelligence.
+    "java.import.gradle.enabled": false,
+    "java.import.maven.enabled": false,
+    "java.gradle.buildServer.enabled": "off",
+    "java.project.sourcePaths": [
+        "FitTracker/app/src/main/java"
+    ],
+    "java.project.outputPath": "FitTracker/app/build/vscode-bin",
+    "java.project.referencedLibraries": [
+        "FitTracker/app/build/vscode-libs/*.jar",
+        "FitTracker/app/build/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debug/processDebugResources/R.jar"
+    ]
+}
