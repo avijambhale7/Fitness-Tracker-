@@ -37,15 +37,35 @@ A Google Fit–style fitness app built for the Mobile Application Development mi
 ## Project structure
 ```
 app/src/main/java/com/example/fittracker/
+├── LoginActivity.java         log in / sign up (Supabase Auth)
 ├── MainActivity.java          bottom navigation, + menu, permission request
 ├── WorkoutActivity.java       live workout tracking (stopwatch)
 ├── model/  ActivityType, Workout
-├── data/   DatabaseHelper (SQLite), UserPrefs, DayStats
+├── data/   DatabaseHelper (SQLite), UserPrefs, DayStats,
+│           SupabaseClient, AuthManager (login session), SyncManager (cloud sync)
 ├── sensor/ StepCounterService (background), StepTracker (sensor logic), BootReceiver
 ├── ui/     HomeFragment, JournalFragment, ProfileFragment, WorkoutAdapter
 ├── views/  RingView, BarChartView (custom drawn)
 └── util/   FitCalc (formulas), DateUtil, BatteryHelper
 ```
+
+## Supabase setup (login + cloud database)
+Accounts and data are stored in [Supabase](https://supabase.com). The app keeps a local SQLite
+copy so it works offline, and syncs each change to the signed-in user's rows.
+
+1. Create a free project at https://supabase.com/dashboard.
+2. Open **SQL Editor → New query**, paste the contents of [`supabase/schema.sql`](supabase/schema.sql) and click **Run**.
+   This creates the `profiles`, `workouts` and `daily_steps` tables with Row Level Security
+   (each user can only see their own rows).
+3. Open **Project Settings → API** and copy the **Project URL** and the **anon / publishable key**
+   into `local.properties` (this file is not committed to git):
+   ```
+   supabase.url=https://YOUR-PROJECT.supabase.co
+   supabase.anonKey=YOUR-ANON-KEY
+   ```
+4. Optional, for testing: **Authentication → Sign In / Providers → Email**, turn off
+   **Confirm email** so new accounts can log in immediately without clicking an email link.
+5. Rebuild and run the app.
 
 ## How to run
 

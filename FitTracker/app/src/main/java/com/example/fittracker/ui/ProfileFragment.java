@@ -1,7 +1,11 @@
 package com.example.fittracker.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +16,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.example.fittracker.LoginActivity;
 import com.example.fittracker.R;
+import com.example.fittracker.data.AuthManager;
 import com.example.fittracker.data.DatabaseHelper;
+import com.example.fittracker.data.SyncManager;
 import com.example.fittracker.data.UserPrefs;
 import com.example.fittracker.sensor.StepCounterService;
 import com.example.fittracker.sensor.StepTracker;
@@ -72,6 +80,10 @@ public class ProfileFragment extends Fragment {
                 BatteryHelper.requestUnrestricted(requireContext());
             }
         });
+
+        TextView tvEmail = v.findViewById(R.id.tv_email);
+        tvEmail.setText(new AuthManager(requireContext()).getCurrentEmail());
+        v.findViewById(R.id.btn_logout).setOnClickListener(x -> confirmLogout());
 
         v.findViewById(R.id.btn_save).setOnClickListener(x -> save());
         v.findViewById(R.id.btn_clear).setOnClickListener(x -> confirmClear());
@@ -156,10 +168,39 @@ public class ProfileFragment extends Fragment {
         tvBmiCategory.setBackground(pill);
     }
 
+    private void confirmLogout() {
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Log out?")
+                .setMessage("Your data is saved to your account. It will be removed from this "
+                        + "phone until you log in again.")
+                .setPositiveButton("Log out", (d, w) -> logout())
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void logout() {
+        Context app = requireContext().getApplicationContext();
+        StepCounterService.stop(app);
+        AlertDialog progress = new MaterialAlertDialogBuilder(requireContext())
+                .setMessage("Saving your data and logging out…")
+                .setCancelable(false)
+                .show();
+        new Thread(() -> {
+            SyncManager.get(app).logout();
+            new Handler(Looper.getMainLooper()).post(() -> {
+                progress.dismiss();
+                Intent intent = new Intent(app, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                app.startActivity(intent);
+            });
+        }).start();
+    }
+
     private void confirmClear() {
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Clear all data?")
-                .setMessage("This deletes every workout and all step history. This cannot be undone.")
+                .setMessage("This deletes every workout and all step history, on this phone and in "
+                        + "your account. This cannot be undone.")
                 .setPositiveButton("Clear", (d, w) -> {
                     DatabaseHelper.get(requireContext()).clearAll();
                     StepTracker.reset(requireContext());

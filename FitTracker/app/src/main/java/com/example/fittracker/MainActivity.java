@@ -18,7 +18,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.fittracker.data.AuthManager;
 import com.example.fittracker.data.DatabaseHelper;
+import com.example.fittracker.data.SyncManager;
 import com.example.fittracker.data.UserPrefs;
 import com.example.fittracker.model.ActivityType;
 import com.example.fittracker.model.Workout;
@@ -47,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!new AuthManager(this).isLoggedIn()) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
         setContentView(R.layout.activity_main);
 
         bottomNav = findViewById(R.id.bottom_nav);
@@ -69,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         // Make sure background counting is running (no-op if it already is)
         StepCounterService.start(this);
+        SyncManager.get(this).retryIfNeeded();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SyncManager.get(this).flushSteps();
     }
 
     private void showScreen(int itemId) {

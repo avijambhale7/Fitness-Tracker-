@@ -12,6 +12,17 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
+
+        // Supabase project settings, read from local.properties (not committed to git)
+        def local = new Properties()
+        def localFile = rootProject.file('local.properties')
+        if (localFile.exists()) localFile.withInputStream { local.load(it) }
+        buildConfigField "String", "SUPABASE_URL", "\"${local.getProperty('supabase.url', '')}\""
+        buildConfigField "String", "SUPABASE_ANON_KEY", "\"${local.getProperty('supabase.anonKey', '')}\""
+    }
+
+    buildFeatures {
+        buildConfig true
     }
 
     buildTypes {

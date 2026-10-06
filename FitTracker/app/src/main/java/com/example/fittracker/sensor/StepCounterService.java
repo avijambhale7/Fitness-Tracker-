@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.fittracker.MainActivity;
 import com.example.fittracker.R;
+import com.example.fittracker.data.AuthManager;
 import com.example.fittracker.data.UserPrefs;
 import com.example.fittracker.util.DateUtil;
 import com.example.fittracker.util.FitCalc;
@@ -53,15 +54,20 @@ public class StepCounterService extends Service implements StepTracker.Listener 
         }
     };
 
-    /** Starts the service if the step permission is granted. Safe to call repeatedly. */
+    /** Starts the service if someone is logged in and the step permission is granted. Safe to call repeatedly. */
     public static void start(Context context) {
-        if (!StepTracker.hasPermission(context)) return;
+        if (!StepTracker.hasPermission(context) || !new AuthManager(context).isLoggedIn()) return;
         try {
             ContextCompat.startForegroundService(context, new Intent(context, StepCounterService.class));
         } catch (Exception e) {
             // Android 12+ blocks starting from the background in some situations
             Log.w(TAG, "Could not start step service", e);
         }
+    }
+
+    /** Stops counting (on logout). */
+    public static void stop(Context context) {
+        context.stopService(new Intent(context, StepCounterService.class));
     }
 
     @Override

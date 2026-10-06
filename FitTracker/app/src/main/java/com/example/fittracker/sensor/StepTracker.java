@@ -81,9 +81,13 @@ public class StepTracker implements SensorEventListener {
                 == PackageManager.PERMISSION_GRANTED;
     }
 
+    public static String todayKey() {
+        return DateUtil.dayKey(System.currentTimeMillis());
+    }
+
     /** Today's steps without touching the sensor. */
     public static int readTodaySteps(Context c) {
-        String today = DateUtil.dayKey(System.currentTimeMillis());
+        String today = todayKey();
         SharedPreferences sp = prefs(c);
         return today.equals(sp.getString(K_DAY, ""))
                 ? sp.getInt(K_TODAY, 0)
@@ -107,6 +111,14 @@ public class StepTracker implements SensorEventListener {
     /** Forgets today's running total (used by "Clear all data"). */
     public static void reset(Context c) {
         prefs(c).edit().remove(K_DAY).remove(K_TODAY).apply();
+    }
+
+    /**
+     * Also forgets the last sensor reading (used on logout), so steps walked while logged
+     * out are not added to the next account that logs in.
+     */
+    public static void resetAll(Context c) {
+        prefs(c).edit().clear().apply();
     }
 
     private static SharedPreferences prefs(Context c) {
